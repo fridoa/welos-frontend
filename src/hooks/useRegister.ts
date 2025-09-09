@@ -1,12 +1,20 @@
-"use client"
+"use client";
 
 import authService from "@/services/auth.service";
-import { IRegister } from "@/types/Auth";
+import { IApiError, IRegister } from "@/types/Auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { Bounce, toast } from "react-toastify";
 import * as yup from "yup";
+
+interface IRegisterResponse {
+  message: string;
+  data: {
+    email: string;
+  };
+}
 
 const registerSchema = yup.object().shape({
   fullName: yup
@@ -44,20 +52,52 @@ const useRegister = () => {
   });
 
   const registerService = async (payload: IRegister) => {
-    return await authService.register(payload);
+    const response = await authService.register(payload);
+    return response.data;
   };
 
-  const { mutate: mutateRegister, isPending: isPendingRegsiter } = useMutation({
+  const { mutate: mutateRegister, isPending: isPendingRegsiter } = useMutation<
+    IRegisterResponse,
+    IApiError,
+    IRegister
+  >({
     mutationFn: registerService,
 
     onError(error) {
-      setError("root", {
-        message: error.message,
-      });
+      const errorMessage = error.response?.data?.message || "Terjadi kesalahan";
+
+      if (errorMessage.toLowerCase().includes("email")) {
+        toast.warning("Email ini sudah terdaftar", {
+          position: "top-right",
+          autoClose: 1400,
+          theme: "light",
+          transition: Bounce,
+        });
+        setError("email", { type: "server", message: errorMessage });
+      } else if (errorMessage.toLowerCase().includes("username")) {
+        toast.warning("Username ini sudah digunakan", {
+          position: "top-right",
+          autoClose: 1400,
+          theme: "light",
+          transition: Bounce,
+        });
+        setError("username", { type: "server", message: errorMessage });
+      } else {
+        setError("root", { type: "server", message: errorMessage });
+      }
     },
 
-    onSuccess: () => {
-      router.push("/auth/activation");
+    onSuccess: (response) => {
+      toast.success("Registrasi berhasil", {
+        position: "top-right",
+        autoClose: 1400,
+        theme: "light",
+        transition: Bounce,
+      });
+      const userEmail = response?.data?.email;
+
+      router.push(`/auth/activation?email=${userEmail}`);
+
       reset();
     },
   });

@@ -3,6 +3,7 @@
 import { HeroUIProvider } from "@heroui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
+import { ToastContainer } from "react-toastify";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +18,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
-        <HeroUIProvider>{children}</HeroUIProvider>;
+        <HeroUIProvider>
+          <ToastContainer />
+          {children}
+        </HeroUIProvider>
+        ;
       </QueryClientProvider>
     </SessionProvider>
   );

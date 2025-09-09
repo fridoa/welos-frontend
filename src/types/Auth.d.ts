@@ -6,6 +6,22 @@ interface IRegister {
   confirmPassword: string;
 }
 
-export type {
-  IRegister,
-};
+interface IActivation {
+  otpCode: string;
+}
+
+interface IVerifyOtp {
+  email: string;
+  otpCode: string;
+}
+
+interface IApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message?: string;
+}
+
+export type { IRegister, IActivation, IVerifyOtp, IApiError };
