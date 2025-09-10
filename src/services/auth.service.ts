@@ -1,4 +1,4 @@
-import { IActivation, IRegister } from "@/types/Auth";
+import { IActivation, ILogin, IRegister } from "@/types/Auth";
 import endpoint from "./endpoint.constant";
 import instance from "@/libs/axios/instance";
 
@@ -8,6 +8,15 @@ const authService = {
 
   authentication: (payload: IActivation) =>
     instance.post(`${endpoint.AUTH}/verification`, payload),
+
+  login: (payload: ILogin) => instance.post(`${endpoint.AUTH}/login`, payload),
+
+  getProfileWithToken: (token: string) =>
+    instance.get(`${endpoint.AUTH}/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 };
 
 export default authService;

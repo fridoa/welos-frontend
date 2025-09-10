@@ -1,14 +1,15 @@
+import LoginForm from "@/components/auth/LoginForm";
 import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Sign in",
+  title: "Login",
   description: "Masuk ke akun Anda.",
 };
 const SigninPage = () => {
   return (
     <div>
-      <h1>Sign In Page</h1>
+      <LoginForm />
     </div>
   );
 };
