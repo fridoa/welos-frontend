@@ -103,7 +103,7 @@ const LoginForm = () => {
             <p className="text-small mt-2 flex items-center justify-center">
               Don{"'"}t have an account?&nbsp;
               <Link
-                href="/auth/login"
+                href="/auth/register"
                 className="font-semibold text-emerald-600"
               >
                 Register
