@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     default: "Welos Rental",
   },
   icons: {
-    icon: "/images/general/logo.png",
+    icon: "/images/general/logo.svg",
   },
 };
 

@@ -22,7 +22,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <ToastContainer />
           {children}
         </HeroUIProvider>
-        ;
       </QueryClientProvider>
     </SessionProvider>
   );
